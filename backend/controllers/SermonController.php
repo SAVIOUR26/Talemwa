@@ -45,6 +45,10 @@ class SermonController
         $stmt->execute([':id' => $params['id']]);
         $sermon = $stmt->fetch();
         if (!$sermon) Response::json(['error' => 'Sermon not found'], 404);
+
+        $db->prepare('UPDATE sermons SET play_count = play_count + 1 WHERE id = :id')
+           ->execute([':id' => $params['id']]);
+
         Response::json($sermon);
     }
 
@@ -57,12 +61,22 @@ class SermonController
 
     public function store(array $params, array $body): void
     {
-        $db   = Database::connect();
-        $stmt = $db->prepare('INSERT INTO sermons (title, series, speaker, description, youtube_url, mp3_url, duration_seconds, thumbnail_url, scripture, tags) VALUES (:title, :series, :speaker, :description, :youtube_url, :mp3_url, :duration_seconds, :thumbnail_url, :scripture, :tags)');
+        if (empty($body['title'])) {
+            Response::json(['error' => 'title is required'], 422);
+        }
+
+        $db        = Database::connect();
+        $published = isset($body['published']) ? (int)$body['published'] : 1;
+        $stmt      = $db->prepare('
+            INSERT INTO sermons (title, series, speaker, description, youtube_url, mp3_url,
+                                 duration_seconds, thumbnail_url, scripture, tags, published)
+            VALUES (:title, :series, :speaker, :description, :youtube_url, :mp3_url,
+                    :duration_seconds, :thumbnail_url, :scripture, :tags, :published)
+        ');
         $stmt->execute([
-            ':title'            => $body['title'] ?? '',
+            ':title'            => $body['title'],
             ':series'           => $body['series'] ?? null,
-            ':speaker'          => $body['speaker'] ?? 'Pastor',
+            ':speaker'          => $body['speaker'] ?? 'Pastor Robert Talemwa',
             ':description'      => $body['description'] ?? null,
             ':youtube_url'      => $body['youtube_url'] ?? null,
             ':mp3_url'          => $body['mp3_url'] ?? null,
@@ -70,15 +84,18 @@ class SermonController
             ':thumbnail_url'    => $body['thumbnail_url'] ?? null,
             ':scripture'        => $body['scripture'] ?? null,
             ':tags'             => $body['tags'] ?? null,
+            ':published'        => $published,
         ]);
         $id = $db->lastInsertId();
 
-        // Notify all devices
-        Notify::broadcast(
-            '🎙️ New Sermon Posted',
-            $body['title'] ?? 'A new message has been uploaded',
-            ['type' => 'sermon', 'id' => $id]
-        );
+        // Send push notification only if published and notify flag is set (default true)
+        if ($published && ($body['notify'] ?? true)) {
+            Notify::broadcast(
+                '🎙️ New Sermon: ' . $body['title'],
+                $body['description'] ? substr($body['description'], 0, 100) : 'A new message has been uploaded',
+                ['type' => 'sermon', 'id' => (string)$id]
+            );
+        }
 
         Response::json(['id' => $id], 201);
     }
@@ -86,8 +103,28 @@ class SermonController
     public function update(array $params, array $body): void
     {
         $db   = Database::connect();
-        $stmt = $db->prepare('UPDATE sermons SET title=:title, series=:series, speaker=:speaker, description=:description, youtube_url=:youtube_url, mp3_url=:mp3_url, scripture=:scripture, tags=:tags WHERE id=:id');
-        $stmt->execute(array_merge($body, [':id' => $params['id']]));
+        $stmt = $db->prepare('
+            UPDATE sermons
+            SET title = :title, series = :series, speaker = :speaker,
+                description = :description, youtube_url = :youtube_url, mp3_url = :mp3_url,
+                duration_seconds = :duration_seconds, thumbnail_url = :thumbnail_url,
+                scripture = :scripture, tags = :tags, published = :published
+            WHERE id = :id
+        ');
+        $stmt->execute([
+            ':title'            => $body['title'],
+            ':series'           => $body['series'] ?? null,
+            ':speaker'          => $body['speaker'] ?? 'Pastor Robert Talemwa',
+            ':description'      => $body['description'] ?? null,
+            ':youtube_url'      => $body['youtube_url'] ?? null,
+            ':mp3_url'          => $body['mp3_url'] ?? null,
+            ':duration_seconds' => $body['duration_seconds'] ?? 0,
+            ':thumbnail_url'    => $body['thumbnail_url'] ?? null,
+            ':scripture'        => $body['scripture'] ?? null,
+            ':tags'             => $body['tags'] ?? null,
+            ':published'        => isset($body['published']) ? (int)$body['published'] : 1,
+            ':id'               => $params['id'],
+        ]);
         Response::json(['updated' => true]);
     }
 

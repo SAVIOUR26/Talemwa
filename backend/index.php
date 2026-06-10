@@ -26,6 +26,10 @@ require_once ROOT . '/controllers/GivingController.php';
 require_once ROOT . '/controllers/PrayerController.php';
 require_once ROOT . '/controllers/AuthController.php';
 require_once ROOT . '/controllers/DeviceController.php';
+require_once ROOT . '/controllers/CampaignController.php';
+require_once ROOT . '/controllers/StatsController.php';
+require_once ROOT . '/controllers/NotificationController.php';
+require_once ROOT . '/controllers/AdminController.php';
 
 // CORS — allow mobile app and website
 header('Access-Control-Allow-Origin: *');
@@ -53,12 +57,15 @@ $router->get('/api/live',              [LiveController::class,    'status']);
 $router->get('/api/events',            [EventController::class,   'index']);
 $router->get('/api/events/{id}',       [EventController::class,   'show']);
 
+$router->get('/api/campaigns',         [CampaignController::class, 'index']);
+
 $router->post('/api/give/initiate',    [GivingController::class,  'initiate']);
 $router->post('/api/give/webhook',     [GivingController::class,  'webhook']);
 
 $router->post('/api/prayer',           [PrayerController::class,  'store']);
 
 $router->post('/api/device/register',  [DeviceController::class,  'register']);
+$router->post('/api/install/track',    [DeviceController::class,  'trackInstall']);
 
 // ── Auth routes ────────────────────────────────────────────────
 $router->post('/api/auth/login',       [AuthController::class,    'login']);
@@ -68,10 +75,37 @@ $router->post('/api/admin/sermons',         [SermonController::class,  'store'],
 $router->put('/api/admin/sermons/{id}',     [SermonController::class,  'update'],  true);
 $router->delete('/api/admin/sermons/{id}',  [SermonController::class,  'destroy'], true);
 
-$router->post('/api/admin/live',            [LiveController::class,    'update'],  true);
-$router->post('/api/admin/events',          [EventController::class,   'store'],   true);
-$router->get('/api/admin/prayers',          [PrayerController::class,  'index'],   true);
-$router->get('/api/admin/givings',          [GivingController::class,  'index'],   true);
-$router->post('/api/admin/notify',          [DeviceController::class,  'broadcast'], true);
+$router->post('/api/admin/live',                    [LiveController::class,         'update'],        true);
+
+$router->post('/api/admin/events',                  [EventController::class,        'store'],         true);
+$router->put('/api/admin/events/{id}',              [EventController::class,        'update'],        true);
+$router->delete('/api/admin/events/{id}',           [EventController::class,        'destroy'],       true);
+
+$router->get('/api/admin/prayers',                  [PrayerController::class,       'index'],         true);
+$router->put('/api/admin/prayers/{id}',             [PrayerController::class,       'update'],        true);
+
+$router->get('/api/admin/givings',                  [GivingController::class,       'index'],         true);
+$router->get('/api/admin/givings/summary',          [GivingController::class,       'summary'],       true);
+
+$router->get('/api/admin/campaigns',                [CampaignController::class,     'index'],         true);
+$router->post('/api/admin/campaigns',               [CampaignController::class,     'store'],         true);
+$router->put('/api/admin/campaigns/{id}',           [CampaignController::class,     'update'],        true);
+$router->delete('/api/admin/campaigns/{id}',        [CampaignController::class,     'destroy'],       true);
+
+$router->get('/api/admin/stats',                    [StatsController::class,        'overview'],      true);
+$router->get('/api/admin/stats/installs',           [StatsController::class,        'installs'],      true);
+$router->get('/api/admin/stats/sermons',            [StatsController::class,        'sermons'],       true);
+$router->get('/api/admin/stats/giving',             [StatsController::class,        'giving'],        true);
+
+$router->post('/api/admin/notify',                  [NotificationController::class, 'send'],          true);
+$router->get('/api/admin/notify/history',           [NotificationController::class, 'history'],       true);
+
+$router->post('/api/admin/radio/schedule',          [RadioController::class,        'updateSchedule'], true);
+$router->put('/api/admin/radio/schedule/{id}',      [RadioController::class,        'updateSchedule'], true);
+
+$router->get('/api/admin/admins',                   [AdminController::class,        'index'],         true);
+$router->post('/api/admin/admins',                  [AdminController::class,        'store'],         true);
+$router->put('/api/admin/admins/{id}',              [AdminController::class,        'update'],        true);
+$router->delete('/api/admin/admins/{id}',           [AdminController::class,        'destroy'],       true);
 
 $router->dispatch();
