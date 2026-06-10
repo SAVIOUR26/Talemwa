@@ -6,11 +6,29 @@
  */
 
 define('ROOT', __DIR__);
+
+// Load .env file into $_ENV if it exists
+$envFile = ROOT . '/.env';
+if (file_exists($envFile)) {
+    foreach (file($envFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) as $line) {
+        if (str_starts_with(trim($line), '#') || !str_contains($line, '=')) continue;
+        [$key, $val] = explode('=', $line, 2);
+        $_ENV[trim($key)] = trim($val);
+        putenv(trim($key) . '=' . trim($val));
+    }
+}
+
 define('DB_PATH', ROOT . '/database/ministry.db');
 define('UPLOAD_PATH', ROOT . '/uploads/sermons/');
-define('JWT_SECRET', $_ENV['JWT_SECRET'] ?? 'change-this-in-production');
-define('FCM_SERVER_KEY', $_ENV['FCM_SERVER_KEY'] ?? '');
-define('STREAM_URL', $_ENV['STREAM_URL'] ?? 'https://radio.yourdomain.com/stream');
+define('JWT_SECRET',              $_ENV['JWT_SECRET']              ?? 'change-this-in-production');
+define('FCM_SERVER_KEY',          $_ENV['FCM_SERVER_KEY']          ?? '');
+define('STREAM_URL',              $_ENV['STREAM_URL']              ?? 'https://radio.roberttalemwa.online/stream');
+define('AZURACAST_URL',           $_ENV['AZURACAST_URL']           ?? '');
+define('AZURACAST_API_KEY',       $_ENV['AZURACAST_API_KEY']       ?? '');
+define('AZURACAST_STATION',       $_ENV['AZURACAST_STATION']       ?? '1');
+define('FLUTTERWAVE_SECRET_KEY',  $_ENV['FLUTTERWAVE_SECRET_KEY']  ?? '');
+define('PAYPAL_CLIENT_ID',        $_ENV['PAYPAL_CLIENT_ID']        ?? '');
+define('PAYPAL_CLIENT_SECRET',    $_ENV['PAYPAL_CLIENT_SECRET']    ?? '');
 
 require_once ROOT . '/core/Database.php';
 require_once ROOT . '/core/Router.php';

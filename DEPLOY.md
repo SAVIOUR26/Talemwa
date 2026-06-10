@@ -1,213 +1,292 @@
 # Talemwa Platform — Deployment Guide
-## roberttalemwa.online
+**Built by Thirdsan Enterprises Ltd · Kampala, Uganda**
 
 ---
 
-## Domain Setup (Namecheap)
-
-### Domains to register
-1. `roberttalemwa.online` — primary (register this first)
-2. `roberttalemwa.com` — brand protection (optional but recommended)
-
-### DNS Records (point all to your RackNerd VPS IP)
-```
-Type    Host        Value               TTL
-A       @           YOUR.VPS.IP.HERE    300
-A       www         YOUR.VPS.IP.HERE    300
-A       api         YOUR.VPS.IP.HERE    300
-A       admin       YOUR.VPS.IP.HERE    300
-A       radio       YOUR.VPS.IP.HERE    300
-```
+## Prerequisites
+- RackNerd VPS with Ubuntu 22.04
+- Domain `roberttalemwa.online` registered on Namecheap
+- Firebase project created
+- Flutterwave account (for payments)
+- PayPal developer account (for diaspora giving)
 
 ---
 
-## VPS Setup (RackNerd — Ubuntu 22.04)
+## Step 1 — DNS Records (Namecheap)
 
-### 1. Install required software
-```bash
-sudo apt update && sudo apt upgrade -y
-sudo apt install -y apache2 php8.2 php8.2-sqlite3 php8.2-curl \
-  php8.2-mbstring php8.2-json certbot python3-certbot-apache unzip git
-```
+Login to Namecheap → Domain List → Manage → Advanced DNS
 
-### 2. Enable Apache modules
-```bash
-sudo a2enmod rewrite ssl headers
-sudo systemctl restart apache2
-```
+| Type | Host  | Value              | TTL |
+|------|-------|--------------------|-----|
+| A    | @     | `YOUR.VPS.IP.HERE` | 300 |
+| A    | www   | `YOUR.VPS.IP.HERE` | 300 |
+| A    | api   | `YOUR.VPS.IP.HERE` | 300 |
+| A    | admin | `YOUR.VPS.IP.HERE` | 300 |
+| A    | radio | `YOUR.VPS.IP.HERE` | 300 |
 
-### 3. Create virtual hosts
-```bash
-# API
-sudo nano /etc/apache2/sites-available/api.roberttalemwa.online.conf
-
-# Paste:
-<VirtualHost *:80>
-    ServerName api.roberttalemwa.online
-    DocumentRoot /var/www/talemwa/backend
-    <Directory /var/www/talemwa/backend>
-        AllowOverride All
-        Require all granted
-    </Directory>
-</VirtualHost>
-```
-
-Repeat for:
-- `roberttalemwa.online` → `/var/www/talemwa/website`
-- `admin.roberttalemwa.online` → `/var/www/talemwa/dashboard`
-
-```bash
-sudo a2ensite api.roberttalemwa.online.conf
-sudo a2ensite roberttalemwa.online.conf
-sudo a2ensite admin.roberttalemwa.online.conf
-sudo systemctl reload apache2
-```
-
-### 4. SSL certificates (free via Let's Encrypt)
-```bash
-sudo certbot --apache -d roberttalemwa.online -d www.roberttalemwa.online
-sudo certbot --apache -d api.roberttalemwa.online
-sudo certbot --apache -d admin.roberttalemwa.online
-# AzuraCast handles its own SSL for radio.roberttalemwa.online
-```
-
-### 5. Deploy files
-```bash
-sudo mkdir -p /var/www/talemwa
-sudo chown -R www-data:www-data /var/www/talemwa
-
-# Upload via FTP or SCP:
-scp -r backend/ user@YOUR.VPS.IP:/var/www/talemwa/
-scp -r dashboard/ user@YOUR.VPS.IP:/var/www/talemwa/
-scp -r website/ user@YOUR.VPS.IP:/var/www/talemwa/
-```
-
-### 6. Set environment variables
-```bash
-sudo nano /var/www/talemwa/backend/.env
-# Paste and fill all values from .env.example
-```
-
-### 7. Set permissions
-```bash
-sudo mkdir -p /var/www/talemwa/backend/database
-sudo mkdir -p /var/www/talemwa/backend/uploads/sermons
-sudo chown -R www-data:www-data /var/www/talemwa/backend/database
-sudo chown -R www-data:www-data /var/www/talemwa/backend/uploads
-sudo chmod 755 /var/www/talemwa/backend/uploads/sermons
-```
-
-### 8. Test the API
-```bash
-curl https://api.roberttalemwa.online/api/live
-# Expected: {"status":"success","data":{"is_live":false,...}}
-```
+> Wait 5–30 minutes for DNS to propagate before running SSL setup.
+> Verify: `dig api.roberttalemwa.online` should return your VPS IP.
 
 ---
 
-## AzuraCast Setup (Online Radio)
+## Step 2 — VPS Setup
 
-### Install AzuraCast (Docker-based)
+SSH into your VPS as root, then:
+
 ```bash
-# AzuraCast needs Docker
-sudo apt install -y docker.io docker-compose
-sudo systemctl enable docker
+# Upload setup script
+scp deploy/scripts/setup-vps.sh root@YOUR.VPS.IP:/root/
+scp deploy/scripts/ssl-certs.sh root@YOUR.VPS.IP:/root/
 
-# Install AzuraCast
-mkdir -p /var/azuracast
-cd /var/azuracast
-curl -fsSL https://raw.githubusercontent.com/AzuraCast/AzuraCast/stable/docker.sh > docker.sh
-chmod a+x docker.sh
-sudo ./docker.sh install
+# Run VPS setup (installs Apache, PHP 8.2, Certbot, UFW)
+ssh root@YOUR.VPS.IP 'bash /root/setup-vps.sh'
+
+# After DNS has propagated, run SSL
+ssh root@YOUR.VPS.IP 'bash /root/ssl-certs.sh'
 ```
 
-### Configure subdomain
+Alternatively run commands manually — see `deploy/scripts/setup-vps.sh`.
+
+---
+
+## Step 3 — Upload Files
+
+From your local machine:
+
 ```bash
-# During AzuraCast install, set domain to: radio.roberttalemwa.online
-# AzuraCast will auto-provision SSL via Let's Encrypt
+# Deploy all three apps at once
+bash deploy/scripts/deploy.sh YOUR.VPS.IP
 ```
 
-### First-time AzuraCast setup
-1. Visit https://radio.roberttalemwa.online
+This rsync's `backend/`, `website/`, and `dashboard/` to `/var/www/talemwa/`
+(skips `.env` and `database/` so existing data is never overwritten).
+
+---
+
+## Step 4 — Configure Environment
+
+```bash
+ssh root@YOUR.VPS.IP
+
+# Create .env from template
+cp /var/www/talemwa/backend/.env.example /var/www/talemwa/backend/.env
+
+# Edit and fill all values
+nano /var/www/talemwa/backend/.env
+```
+
+**Required values to fill in:**
+
+| Key | Where to get it |
+|-----|----------------|
+| `JWT_SECRET` | Run: `openssl rand -hex 32` |
+| `FCM_SERVER_KEY` | Firebase Console → Project Settings → Cloud Messaging |
+| `AZURACAST_API_KEY` | AzuraCast Admin → API Keys (after Step 5) |
+| `FLUTTERWAVE_PUBLIC_KEY` | Flutterwave Dashboard → Settings → API Keys |
+| `FLUTTERWAVE_SECRET_KEY` | Same as above |
+| `FLUTTERWAVE_ENCRYPTION_KEY` | Same as above |
+| `PAYPAL_CLIENT_ID` | PayPal Developer → My Apps |
+| `PAYPAL_CLIENT_SECRET` | Same as above |
+
+---
+
+## Step 5 — AzuraCast (Online Radio)
+
+```bash
+ssh root@YOUR.VPS.IP
+bash deploy/scripts/azuracast-setup.sh
+```
+
+During installation when prompted:
+- Environment: **production**
+- HTTP port: **8080**, HTTPS port: **8443**
+- Let's Encrypt domain: **radio.roberttalemwa.online**
+- Let's Encrypt email: **saviour@thirdsan.com**
+
+**After installation:**
+1. Visit `https://radio.roberttalemwa.online`
 2. Create admin account
-3. Create station: "Talemwa Radio"
+3. Create station: **"Talemwa Radio"**
 4. Set stream URL path: `/stream`
-5. Upload intro/hold music (worship songs)
-6. Create weekly schedule
-7. Copy API key → paste into backend `.env` as `AZURACAST_API_KEY`
-8. Copy stream URL → `https://radio.roberttalemwa.online/stream`
+5. Upload intro/hold music (worship songs, ~30 min loop)
+6. Admin → API Keys → Generate → copy key → paste into `.env` as `AZURACAST_API_KEY`
+7. Set weekly broadcast schedule
 
 ---
 
-## Firebase Setup (Push Notifications)
+## Step 6 — Firebase Setup (Push Notifications)
 
-1. Go to https://console.firebase.google.com
-2. Create project: "Talemwa"
-3. Add Android app: `com.thirdsan.talemwa`
-4. Add iOS app: `com.thirdsan.talemwa`
-5. Download `google-services.json` → place in `flutter-app/android/app/`
-6. Download `GoogleService-Info.plist` → place in `flutter-app/ios/Runner/`
-7. Project Settings → Cloud Messaging → copy Server Key → paste into `.env` as `FCM_SERVER_KEY`
+1. Go to [Firebase Console](https://console.firebase.google.com)
+2. Create project: **"Talemwa"**
+3. **Add Android app**
+   - Package name: `com.thirdsan.talemwa`
+   - Download `google-services.json`
+   - Place at `flutter-app/android/app/google-services.json`
+4. **Add iOS app**
+   - Bundle ID: `com.thirdsan.talemwa`
+   - Download `GoogleService-Info.plist`
+   - Place at `flutter-app/ios/Runner/GoogleService-Info.plist`
+5. Project Settings → Cloud Messaging → **Server Key** → copy → paste into `.env` as `FCM_SERVER_KEY`
 
 ---
 
-## Flutter App Build & Deploy
+## Step 7 — Change Default Admin Password
 
-### Android (Google Play)
+**CRITICAL — do this before going live.**
+
+Login to `https://admin.roberttalemwa.online`  
+Default credentials (from seed data):
+- Email: `admin@roberttalemwa.online`
+- Password: `TalemwaAdmin2024!`
+
+Go to Settings → Change Password → set a strong new password.
+
+---
+
+## Step 8 — Flutter App Build
+
 ```bash
 cd flutter-app
+
+# Verify Firebase files are in place:
+# - android/app/google-services.json    (from Firebase Console)
+# - ios/Runner/GoogleService-Info.plist (from Firebase Console)
+
+# Get dependencies
 flutter pub get
+
+# Android — release APK (for direct install / testing)
 flutter build apk --release
-# APK at: build/app/outputs/flutter-apk/app-release.apk
+# Output: build/app/outputs/flutter-apk/app-release.apk
 
-# For Play Store:
+# Android — App Bundle (for Google Play)
 flutter build appbundle --release
-# Bundle at: build/app/outputs/bundle/release/app-release.aab
-```
+# Output: build/app/outputs/bundle/release/app-release.aab
 
-### iOS (App Store)
-```bash
+# iOS (requires macOS + Xcode)
 flutter build ios --release
-# Then open ios/ in Xcode → Archive → Upload to App Store Connect
+# Then: open ios/ in Xcode → Product → Archive → Upload to App Store Connect
 ```
 
-### App Store setup
-- **Google Play Console**: https://play.google.com/console
-  - App name: Talemwa
-  - Package: com.thirdsan.talemwa
-  - Category: Lifestyle / Religion & Spirituality
-  - One-time fee: $25
+**Before release build:**
+- Update `flutter-app/lib/core/constants.dart` → `flutterwavePublicKey` with real key
+- Verify `apiBaseUrl` is `https://api.roberttalemwa.online`
 
-- **Apple App Store Connect**: https://appstoreconnect.apple.com
-  - App name: Talemwa
-  - Bundle ID: com.thirdsan.talemwa
-  - Category: Lifestyle / Religion & Spirituality
-  - Annual fee: $99/yr
+---
+
+## Step 9 — App Store Submissions
+
+### Google Play Console
+- URL: https://play.google.com/console
+- App name: **Talemwa**
+- Package: `com.thirdsan.talemwa`
+- Category: Lifestyle → Religion & Spirituality
+- Rating: Everyone
+- One-time registration fee: **$25 USD**
+
+Required assets:
+- App icon: 512×512 PNG (no alpha)
+- Feature graphic: 1024×500 PNG
+- Screenshots: phone (min 2), tablet (optional)
+- Short description (80 chars): "Sermons, radio & live streaming from Pastor Robert Talemwa"
+- Full description: ministry overview + features
+
+### Apple App Store Connect
+- URL: https://appstoreconnect.apple.com
+- App name: **Talemwa**
+- Bundle ID: `com.thirdsan.talemwa`
+- SKU: `com.thirdsan.talemwa`
+- Category: Lifestyle (primary), Reference (secondary)
+- Annual developer fee: **$99 USD/year**
+
+---
+
+## Step 10 — Flutterwave Webhook
+
+In your Flutterwave dashboard, set the webhook URL to:
+```
+https://api.roberttalemwa.online/api/give/webhook
+```
+
+This fires when a payment completes and marks the giving record as `completed`.
 
 ---
 
 ## Post-Deployment Checklist
 
-- [ ] All DNS records pointing to VPS
-- [ ] SSL active on all 4 subdomains
-- [ ] API returns valid JSON at api.roberttalemwa.online/api/live
-- [ ] Admin dashboard login works at admin.roberttalemwa.online
-- [ ] Default admin password changed from `TalemwaAdmin2024!`
-- [ ] AzuraCast station streaming at radio.roberttalemwa.online/stream
-- [ ] FCM test notification sent and received on test device
-- [ ] Flutterwave test payment completed successfully
-- [ ] Flutter app connects to API in debug mode
-- [ ] Flutter app release build generated
-- [ ] App submitted to Google Play
-- [ ] App submitted to Apple App Store
+### Infrastructure
+- [ ] DNS A records live for `@`, `www`, `api`, `admin`, `radio`
+- [ ] SSL active on `roberttalemwa.online` — green padlock in browser
+- [ ] SSL active on `api.roberttalemwa.online`
+- [ ] SSL active on `admin.roberttalemwa.online`
+- [ ] SSL active on `radio.roberttalemwa.online` (AzuraCast handles this)
+
+### Backend API
+- [ ] `curl https://api.roberttalemwa.online/api/live` returns `{"status":"success",...}`
+- [ ] `curl https://api.roberttalemwa.online/api/sermons` returns sermon list
+- [ ] Admin login: `POST /api/auth/login` works
+- [ ] `.env` has all production values (no `REPLACE_` placeholders remain)
+
+### Admin Dashboard
+- [ ] Login works at `https://admin.roberttalemwa.online`
+- [ ] **Default password changed** from `TalemwaAdmin2024!`
+- [ ] Radio live control: GO LIVE button toggles `is_live` correctly
+- [ ] Upload a test sermon — confirms SQLite write works
+- [ ] Prayer submission shows in prayers list
+- [ ] Push notification composer sends a test notification
+
+### Radio
+- [ ] `https://radio.roberttalemwa.online/stream` streams audio
+- [ ] AzuraCast dashboard accessible
+- [ ] Station name: "Talemwa Radio"
+- [ ] Schedule populated with Sunday/Wednesday/Friday/Daily slots
+- [ ] API proxy works: `curl https://api.roberttalemwa.online/api/radio`
+
+### Flutter App
+- [ ] Debug build connects to production API
+- [ ] Live banner shows when `is_live=true`
+- [ ] Sermon audio plays (both YouTube and MP3)
+- [ ] Radio stream plays
+- [ ] Push notification received on test device
+- [ ] Prayer submission works
+- [ ] Giving flow opens Flutterwave checkout
+- [ ] FCM token registers on device boot
+- [ ] Release APK / App Bundle generated successfully
+- [ ] Submitted to Google Play (in review)
+- [ ] Submitted to Apple App Store (in review)
+
+### Website
+- [ ] `https://roberttalemwa.online` loads correctly
+- [ ] Sermons archive lists sermons
+- [ ] Radio bar at bottom plays stream
+- [ ] Live page shows YouTube player when live
+- [ ] Giving page opens Flutterwave
 
 ---
 
-## Support Contacts
+## Ongoing Maintenance
+
+### Weekly
+- Check AzuraCast is running: `cd /var/azuracast && ./docker.sh status`
+- Check disk space: `df -h` (uploads/sermons dir will grow)
+
+### Monthly
+- SSL renewal is automatic (Certbot timer). Verify: `certbot renew --dry-run`
+- Review error logs: `tail -100 /var/log/apache2/api-error.log`
+
+### Backups
+```bash
+# Backup database + uploads (run on VPS, store offsite)
+tar -czf talemwa-backup-$(date +%Y%m%d).tar.gz \
+  /var/www/talemwa/backend/database/ \
+  /var/www/talemwa/backend/uploads/ \
+  /var/www/talemwa/backend/.env
+```
+
+---
+
+## Support
 
 - **Developer**: Saviour — Thirdsan Enterprises Ltd, Kampala
-- **Client**: Pastor Robert Talemwa
-- **Domain registrar**: Namecheap
-- **Hosting**: RackNerd VPS
-- **Radio**: AzuraCast (open source)
-- **Payments**: Flutterwave (Africa) + PayPal (diaspora)
+- **Contact**: saviour@thirdsan.com
+- **Client**: Pastor Robert Talemwa — roberttalemwa.online

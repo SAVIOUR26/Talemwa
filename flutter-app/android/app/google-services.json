@@ -1,0 +1,33 @@
+{
+  "_README": "REPLACE THIS FILE with the real google-services.json downloaded from Firebase Console",
+  "_STEPS": [
+    "1. Go to https://console.firebase.google.com",
+    "2. Create or open project 'Talemwa'",
+    "3. Add Android app with package name: com.thirdsan.talemwa",
+    "4. Download google-services.json",
+    "5. Replace this file with the downloaded one",
+    "6. Do the same for ios/Runner/GoogleService-Info.plist"
+  ],
+  "project_info": {
+    "project_number": "REPLACE",
+    "project_id": "talemwa-REPLACE",
+    "storage_bucket": "talemwa-REPLACE.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:REPLACE:android:REPLACE",
+        "android_client_info": {
+          "package_name": "com.thirdsan.talemwa"
+        }
+      },
+      "api_key": [{"current_key": "REPLACE"}],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

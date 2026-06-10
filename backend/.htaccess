@@ -1,4 +1,10 @@
+Options -Indexes
 RewriteEngine On
+
+# Route all requests to index.php (except real files)
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^(.*)$ index.php [QSA,L]
+RewriteRule ^ index.php [QSA,L]
+
+# Pass Authorization header to PHP (Apache strips it by default)
+SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1
