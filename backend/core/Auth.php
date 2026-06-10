@@ -11,6 +11,12 @@ class Auth
         return self::verify($token);
     }
 
+    // Returns the current authenticated user payload (call after guard passes)
+    public static function user(): ?array
+    {
+        return self::guard();
+    }
+
     public static function sign(array $payload): string
     {
         $header  = base64_encode(json_encode(['alg' => 'HS256', 'typ' => 'JWT']));

@@ -1,5 +1,5 @@
-name: ministry_app
-description: Ministry Platform — Sermons, Radio & Live Streaming
+name: talemwa
+description: Talemwa — Ministry App by Pastor Robert Talemwa
 publish_to: none
 version: 1.0.0+1
 
@@ -36,10 +36,15 @@ dependencies:
   # Navigation
   go_router: ^13.0.0
 
+  # WebView (Flutterwave checkout)
+  webview_flutter: ^4.4.2
+
   # Utils
   url_launcher: ^6.2.4
   share_plus: ^7.2.1
   intl: ^0.18.1
+  package_info_plus: ^5.0.1
+  flutter_local_notifications: ^16.3.0
 
 dev_dependencies:
   flutter_test:
