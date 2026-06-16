@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  # ── 1. Build & deploy public website ──────────────────────────────────────
+  # ── 1. Build & deploy public website ────────────────────────────────────────
   deploy-website:
     name: Website → roberttalemwa.online
     runs-on: ubuntu-latest
@@ -16,8 +16,8 @@ jobs:
       - name: Build Tailwind CSS (website)
         working-directory: ./website
         run: |
-          npm install -D tailwindcss
-          npx tailwindcss -i assets/css/input.css -o assets/css/app.css --minify --config tailwind.config.js
+          npm install -D tailwindcss@3
+          ./node_modules/.bin/tailwindcss -i assets/css/input.css -o assets/css/app.css --minify --config tailwind.config.js
 
       - name: Upload website files
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
@@ -34,7 +34,7 @@ jobs:
             **/tailwind.config.js
             **/assets/css/input.css
 
-  # ── 2. Build & deploy admin dashboard ─────────────────────────────────
+  # ── 2. Build & deploy admin dashboard ───────────────────────────────────────
   deploy-dashboard:
     name: Dashboard → admin.roberttalemwa.online
     runs-on: ubuntu-latest
@@ -44,8 +44,8 @@ jobs:
       - name: Build Tailwind CSS (dashboard)
         working-directory: ./dashboard
         run: |
-          npm install -D tailwindcss
-          npx tailwindcss -i assets/css/input.css -o assets/css/app.css --minify --config tailwind.config.js
+          npm install -D tailwindcss@3
+          ./node_modules/.bin/tailwindcss -i assets/css/input.css -o assets/css/app.css --minify --config tailwind.config.js
 
       - name: Upload dashboard files
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
@@ -62,7 +62,7 @@ jobs:
             **/tailwind.config.js
             **/assets/css/input.css
 
-  # ── 3. Deploy backend API (no build step needed) ────────────────────────
+  # ── 3. Deploy backend API (no build step needed) ─────────────────────────────
   deploy-api:
     name: API → api.roberttalemwa.online
     runs-on: ubuntu-latest
