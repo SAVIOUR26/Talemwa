@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  # ── 1. Deploy public website ───────────────────────────────────────────
+  # ── 1. Deploy public website ────────────────────────────────────────────────
   deploy-website:
     name: Website → roberttalemwa.online
     runs-on: ubuntu-latest
@@ -28,7 +28,7 @@ jobs:
             **/tailwind.config.js
             **/assets/css/input.css
 
-  # ── 2. Deploy admin dashboard ─────────────────────────────────────────
+  # ── 2. Deploy admin dashboard ───────────────────────────────────────────────
   deploy-dashboard:
     name: Dashboard → admin.roberttalemwa.online
     runs-on: ubuntu-latest
@@ -50,7 +50,7 @@ jobs:
             **/tailwind.config.js
             **/assets/css/input.css
 
-  # ── 3. Deploy backend API ──────────────────────────────────────────────────
+  # ── 3. Deploy backend API ────────────────────────────────────────────────────
   deploy-api:
     name: API → api.roberttalemwa.online
     runs-on: ubuntu-latest
