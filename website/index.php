@@ -4,6 +4,11 @@
  * Simple PHP router — no framework, no build step.
  */
 
+// Bypass LiteSpeed full-page cache so PHP always executes
+header('X-LiteSpeed-Cache-Control: no-cache');
+header('Cache-Control: no-store, no-cache, must-revalidate');
+header('Pragma: no-cache');
+
 $route = trim($_GET['route'] ?? '', '/');
 if ($route === '') $route = 'home';
 

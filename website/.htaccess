@@ -5,3 +5,8 @@ RewriteBase /
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.*)$ index.php?route=$1 [QSA,L]
+
+# Disable LiteSpeed full-page cache for PHP-generated pages
+<IfModule LiteSpeed>
+CacheDisable public /
+</IfModule>
