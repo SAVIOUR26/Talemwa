@@ -64,9 +64,3 @@
   </div>
 </nav>
 
-<style>
-  .nav-link { color:#9ca3af; padding:0.4rem 0.75rem; border-radius:0.5rem; font-size:0.875rem; transition:all 0.15s; text-decoration:none; }
-  .nav-link:hover, .nav-link.active { color:#fff; background:rgba(255,255,255,0.08); }
-  .mobile-link { display:block; color:#9ca3af; padding:0.6rem 0.75rem; border-radius:0.5rem; font-size:0.9rem; text-decoration:none; }
-  .mobile-link:hover { color:#fff; background:rgba(255,255,255,0.08); }
-</style>
