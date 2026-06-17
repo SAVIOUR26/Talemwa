@@ -10,6 +10,7 @@
 <meta property="og:image" content="https://roberttalemwa.online/assets/img/og-image.jpg">
 <meta property="og:url" content="https://roberttalemwa.online<?= $_SERVER['REQUEST_URI'] ?>">
 <meta name="theme-color" content="#0A1628">
+<link rel="icon" type="image/svg+xml" href="/assets/img/favicon.svg">
 <link rel="icon" type="image/png" href="/assets/img/favicon.png">
 <!-- Fonts: Inter — falls back to system-ui if unavailable -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
