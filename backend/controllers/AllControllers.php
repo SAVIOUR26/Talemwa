@@ -5,11 +5,14 @@ class RadioController
 {
     public function nowPlaying(array $params, array $body): void
     {
-        // Proxy AzuraCast's Now Playing API to avoid CORS issues in app
-        $azuraUrl = rtrim($_ENV['AZURACAST_URL'] ?? 'https://radio.yourdomain.com', '/');
+        // Proxy AzuraCast's Now Playing API to avoid CORS issues in app.
+        // Until AzuraCast is provisioned, AZURACAST_URL stays unset and we
+        // skip straight to the static fallback below (e.g. a free hosted
+        // stream URL in STREAM_URL such as Zeno.fm).
+        $azuraUrl  = rtrim($_ENV['AZURACAST_URL'] ?? '', '/');
         $stationId = $_ENV['AZURACAST_STATION'] ?? '1';
 
-        $json = @file_get_contents("$azuraUrl/api/nowplaying/$stationId");
+        $json = $azuraUrl ? @file_get_contents("$azuraUrl/api/nowplaying/$stationId") : false;
 
         if ($json) {
             $data = json_decode($json, true);
