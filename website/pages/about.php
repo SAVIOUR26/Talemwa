@@ -2,8 +2,8 @@
 $pageTitle   = 'About Pastor Robert Talemwa';
 $metaDesc    = 'Learn about Pastor Robert Talemwa — missionary preacher from Kampala, Uganda with a mandate to preach the gospel and take healing to nations.';
 $currentPage = 'about';
-include '../partials/head.php';
-include '../partials/nav.php';
+include __DIR__ . '/../partials/head.php';
+include __DIR__ . '/../partials/nav.php';
 ?>
 
 <!-- Hero -->
@@ -113,5 +113,5 @@ include '../partials/nav.php';
   </div>
 </section>
 
-<?php include '../partials/radio-bar.php'; ?>
-<?php include '../partials/footer.php'; ?>
+<?php include __DIR__ . '/../partials/radio-bar.php'; ?>
+<?php include __DIR__ . '/../partials/footer.php'; ?>

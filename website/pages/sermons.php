@@ -2,8 +2,8 @@
 $pageTitle   = 'Sermon Archive';
 $metaDesc    = 'Browse and listen to sermons by Pastor Robert Talemwa. Search by title, series, or scripture.';
 $currentPage = 'sermons';
-include '../partials/head.php';
-include '../partials/nav.php';
+include __DIR__ . '/../partials/head.php';
+include __DIR__ . '/../partials/nav.php';
 ?>
 
 <section class="bg-navy py-12">
@@ -101,8 +101,8 @@ include '../partials/nav.php';
 
 </main>
 
-<?php include '../partials/radio-bar.php'; ?>
-<?php include '../partials/footer.php'; ?>
+<?php include __DIR__ . '/../partials/radio-bar.php'; ?>
+<?php include __DIR__ . '/../partials/footer.php'; ?>
 
 <script>
 function sermonArchive() {

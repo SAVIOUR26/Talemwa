@@ -2,8 +2,8 @@
 $pageTitle   = 'Events';
 $metaDesc    = 'Upcoming ministry events, services, and crusades with Pastor Robert Talemwa.';
 $currentPage = 'events';
-include '../partials/head.php';
-include '../partials/nav.php';
+include __DIR__ . '/../partials/head.php';
+include __DIR__ . '/../partials/nav.php';
 ?>
 
 <section class="bg-navy py-12 text-white text-center">
@@ -79,8 +79,8 @@ include '../partials/nav.php';
 
 </main>
 
-<?php include '../partials/radio-bar.php'; ?>
-<?php include '../partials/footer.php'; ?>
+<?php include __DIR__ . '/../partials/radio-bar.php'; ?>
+<?php include __DIR__ . '/../partials/footer.php'; ?>
 
 <script>
 function eventsList() {

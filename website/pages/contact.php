@@ -2,8 +2,8 @@
 $pageTitle   = 'Contact';
 $metaDesc    = 'Contact Pastor Robert Talemwa Ministry. Based in Kampala, Uganda. Reach our global congregation.';
 $currentPage = 'contact';
-include '../partials/head.php';
-include '../partials/nav.php';
+include __DIR__ . '/../partials/head.php';
+include __DIR__ . '/../partials/nav.php';
 ?>
 
 <section class="bg-navy py-12 text-white text-center">
@@ -101,8 +101,8 @@ include '../partials/nav.php';
 .input-field:focus { border-color:#C9A84C; box-shadow:0 0 0 1px #C9A84C; }
 </style>
 
-<?php include '../partials/radio-bar.php'; ?>
-<?php include '../partials/footer.php'; ?>
+<?php include __DIR__ . '/../partials/radio-bar.php'; ?>
+<?php include __DIR__ . '/../partials/footer.php'; ?>
 
 <script>
 function contactForm() {

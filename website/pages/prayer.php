@@ -2,8 +2,8 @@
 $pageTitle   = 'Prayer Request';
 $metaDesc    = 'Submit a prayer request to Pastor Robert Talemwa and the ministry team. We pray for every request.';
 $currentPage = 'prayer';
-include '../partials/head.php';
-include '../partials/nav.php';
+include __DIR__ . '/../partials/head.php';
+include __DIR__ . '/../partials/nav.php';
 ?>
 
 <section class="bg-navy py-12 text-white text-center">
@@ -80,8 +80,8 @@ include '../partials/nav.php';
 
 </main>
 
-<?php include '../partials/radio-bar.php'; ?>
-<?php include '../partials/footer.php'; ?>
+<?php include __DIR__ . '/../partials/radio-bar.php'; ?>
+<?php include __DIR__ . '/../partials/footer.php'; ?>
 
 <script>
 function prayerForm() {
