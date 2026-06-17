@@ -1,6 +1,6 @@
 <?php $pageTitle = 'Giving Campaigns'; $activePage = 'giving-campaigns'; ?>
-<?php include '../partials/header.php'; ?>
-<?php include '../partials/sidebar.php'; ?>
+<?php include __DIR__ . '/../partials/header.php'; ?>
+<?php include __DIR__ . '/../partials/sidebar.php'; ?>
 
 <div class="ml-64 flex-1 flex flex-col min-h-screen">
   <header class="bg-white border-b border-gray-200 px-8 py-4 flex items-center justify-between sticky top-0 z-20">
@@ -160,4 +160,4 @@ function campaignForm() {
 }
 </script>
 
-<?php include '../partials/footer.php'; ?>
+<?php include __DIR__ . '/../partials/footer.php'; ?>

@@ -1,8 +1,8 @@
 <?php
 $pageTitle   = 'Page Not Found';
 $currentPage = '';
-include '../partials/head.php';
-include '../partials/nav.php';
+include __DIR__ . '/../partials/head.php';
+include __DIR__ . '/../partials/nav.php';
 ?>
 
 <main class="flex-1 flex items-center justify-center py-24 px-4">
@@ -21,4 +21,4 @@ include '../partials/nav.php';
   </div>
 </main>
 
-<?php include '../partials/footer.php'; ?>
+<?php include __DIR__ . '/../partials/footer.php'; ?>

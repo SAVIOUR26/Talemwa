@@ -2,8 +2,8 @@
 $pageTitle   = 'Give Online';
 $metaDesc    = 'Support the ministry of Pastor Robert Talemwa. Give tithes, offerings, and project gifts securely online.';
 $currentPage = 'give';
-include '../partials/head.php';
-include '../partials/nav.php';
+include __DIR__ . '/../partials/head.php';
+include __DIR__ . '/../partials/nav.php';
 ?>
 
 <section class="bg-navy py-12 text-white text-center">
@@ -161,8 +161,8 @@ include '../partials/nav.php';
 <!-- Flutterwave inline checkout will be injected here -->
 <div id="flutterwave-checkout"></div>
 
-<?php include '../partials/radio-bar.php'; ?>
-<?php include '../partials/footer.php'; ?>
+<?php include __DIR__ . '/../partials/radio-bar.php'; ?>
+<?php include __DIR__ . '/../partials/footer.php'; ?>
 
 <script src="https://checkout.flutterwave.com/v3.js"></script>
 <script>

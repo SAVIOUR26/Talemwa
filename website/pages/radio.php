@@ -2,8 +2,8 @@
 $pageTitle   = 'Online Radio';
 $metaDesc    = 'Listen to Ministry Radio — sermons, worship, and devotionals 24/7 on radio.roberttalemwa.online';
 $currentPage = 'radio';
-include '../partials/head.php';
-include '../partials/nav.php';
+include __DIR__ . '/../partials/head.php';
+include __DIR__ . '/../partials/nav.php';
 ?>
 
 <main class="flex-1" x-data="radioPage()" x-init="init()">
@@ -90,7 +90,7 @@ include '../partials/nav.php';
 
 </main>
 
-<?php include '../partials/footer.php'; ?>
+<?php include __DIR__ . '/../partials/footer.php'; ?>
 
 <script>
 function radioPage() {

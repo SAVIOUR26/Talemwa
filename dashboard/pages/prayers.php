@@ -1,6 +1,6 @@
 <?php $pageTitle = 'Prayer Requests'; $activePage = 'prayers'; ?>
-<?php include '../partials/header.php'; ?>
-<?php include '../partials/sidebar.php'; ?>
+<?php include __DIR__ . '/../partials/header.php'; ?>
+<?php include __DIR__ . '/../partials/sidebar.php'; ?>
 
 <div class="ml-64 flex-1 flex flex-col min-h-screen">
 
@@ -163,4 +163,4 @@ function prayerList() {
 }
 </script>
 
-<?php include '../partials/footer.php'; ?>
+<?php include __DIR__ . '/../partials/footer.php'; ?>

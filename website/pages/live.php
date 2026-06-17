@@ -2,8 +2,8 @@
 $pageTitle   = 'Watch Live';
 $metaDesc    = 'Watch Pastor Robert Talemwa live on Sunday. Join the live service from anywhere in the world.';
 $currentPage = 'live';
-include '../partials/head.php';
-include '../partials/nav.php';
+include __DIR__ . '/../partials/head.php';
+include __DIR__ . '/../partials/nav.php';
 ?>
 
 <main x-data="livePage()" x-init="init()" class="flex-1">
@@ -125,8 +125,8 @@ include '../partials/nav.php';
 
 </main>
 
-<?php include '../partials/radio-bar.php'; ?>
-<?php include '../partials/footer.php'; ?>
+<?php include __DIR__ . '/../partials/radio-bar.php'; ?>
+<?php include __DIR__ . '/../partials/footer.php'; ?>
 
 <script>
 function livePage() {

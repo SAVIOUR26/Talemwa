@@ -2,8 +2,8 @@
 $sermonId    = (int)($_GET['sermon_id'] ?? 0);
 $pageTitle   = 'Sermon';
 $currentPage = 'sermons';
-include '../partials/head.php';
-include '../partials/nav.php';
+include __DIR__ . '/../partials/head.php';
+include __DIR__ . '/../partials/nav.php';
 ?>
 
 <main x-data="sermonDetail(<?= $sermonId ?>)" x-init="init()" class="pb-8">
@@ -149,8 +149,8 @@ include '../partials/nav.php';
 
 </main>
 
-<?php include '../partials/radio-bar.php'; ?>
-<?php include '../partials/footer.php'; ?>
+<?php include __DIR__ . '/../partials/radio-bar.php'; ?>
+<?php include __DIR__ . '/../partials/footer.php'; ?>
 
 <script>
 function sermonDetail(id) {

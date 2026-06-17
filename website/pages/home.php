@@ -2,8 +2,8 @@
 $pageTitle  = 'Healing to the Nations';
 $metaDesc   = 'Pastor Robert Talemwa — Missionary preacher from Kampala, Uganda. Watch live streams, listen to sermons, and join our global ministry.';
 $currentPage = 'home';
-include '../partials/head.php';
-include '../partials/nav.php';
+include __DIR__ . '/../partials/head.php';
+include __DIR__ . '/../partials/nav.php';
 ?>
 
 <!-- Hero Section -->
@@ -202,8 +202,8 @@ include '../partials/nav.php';
   </div>
 </section>
 
-<?php include '../partials/radio-bar.php'; ?>
-<?php include '../partials/footer.php'; ?>
+<?php include __DIR__ . '/../partials/radio-bar.php'; ?>
+<?php include __DIR__ . '/../partials/footer.php'; ?>
 
 <script>
 function featuredSermon() {
