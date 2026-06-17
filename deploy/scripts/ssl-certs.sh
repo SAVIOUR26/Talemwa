@@ -37,11 +37,17 @@ certbot --apache \
   --email "$EMAIL" \
   --redirect
 
+# Radio (reverse-proxied to AzuraCast on 127.0.0.1:8080 — run AFTER setup-vps.sh
+# has created the radio.$DOMAIN.conf vhost and AFTER azuracast-setup.sh)
+certbot --apache \
+  -d "radio.$DOMAIN" \
+  --non-interactive \
+  --agree-tos \
+  --email "$EMAIL" \
+  --redirect
+
 echo ""
 echo "=== SSL certificates issued successfully ==="
 echo ""
 echo "Auto-renewal is already configured by Certbot."
 echo "Test renewal: certbot renew --dry-run"
-echo ""
-echo "NOTE: radio.$DOMAIN SSL is handled by AzuraCast itself"
-echo "      during its installation — no manual cert needed."

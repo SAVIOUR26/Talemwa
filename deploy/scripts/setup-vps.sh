@@ -30,7 +30,7 @@ apt install -y \
 
 # ── 3. Enable Apache modules ──────────────────────────────────────────────────
 echo ">>> Enabling Apache modules..."
-a2enmod rewrite ssl headers
+a2enmod rewrite ssl headers proxy proxy_http proxy_wstunnel
 systemctl enable apache2
 systemctl restart apache2
 
@@ -110,9 +110,26 @@ cat > /etc/apache2/sites-available/admin.$DOMAIN.conf << EOF
 </VirtualHost>
 EOF
 
+# Radio — radio.roberttalemwa.online (reverse proxy to AzuraCast on :8080)
+cat > /etc/apache2/sites-available/radio.$DOMAIN.conf << EOF
+<VirtualHost *:80>
+    ServerName radio.$DOMAIN
+    ProxyPreserveHost On
+    ProxyRequests Off
+    RewriteEngine On
+    RewriteCond %{HTTP:Upgrade} websocket [NC]
+    RewriteCond %{HTTP:Connection} upgrade [NC]
+    RewriteRule ^/(.*)\$ ws://127.0.0.1:8080/\$1 [P,L]
+    ProxyPass        / http://127.0.0.1:8080/
+    ProxyPassReverse / http://127.0.0.1:8080/
+    ErrorLog  \${APACHE_LOG_DIR}/radio-error.log
+    CustomLog \${APACHE_LOG_DIR}/radio-access.log combined
+</VirtualHost>
+EOF
+
 # Disable default site, enable ours
 a2dissite 000-default.conf
-a2ensite $DOMAIN.conf api.$DOMAIN.conf admin.$DOMAIN.conf
+a2ensite $DOMAIN.conf api.$DOMAIN.conf admin.$DOMAIN.conf radio.$DOMAIN.conf
 systemctl reload apache2
 
 echo ""
