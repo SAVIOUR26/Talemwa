@@ -59,9 +59,9 @@ include __DIR__ . '/../partials/nav.php';
       </div>
 
       <!-- Stream URL -->
-      <p class="text-xs text-gray-500">
+      <p class="text-xs text-gray-500" x-show="streamUrl">
         Stream directly:
-        <a href="https://radio.roberttalemwa.online/stream" class="text-gold hover:underline">radio.roberttalemwa.online/stream</a>
+        <a :href="streamUrl" x-text="streamUrl" class="text-gold hover:underline"></a>
       </p>
     </div>
   </div>
