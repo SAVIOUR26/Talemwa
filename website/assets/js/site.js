@@ -35,10 +35,22 @@ function radioPlayer() {
     isOnline:   false,
     streamUrl:  '',
     audio:      null,
+    volume:     1,
+    muted:      false,
 
     async init() {
       await this.fetchStatus();
       setInterval(() => this.fetchNowPlaying(), 30000);
+    },
+
+    setVolume() {
+      this.muted = false;
+      if (this.audio) this.audio.volume = this.volume;
+    },
+
+    toggleMute() {
+      this.muted = !this.muted;
+      if (this.audio) this.audio.volume = this.muted ? 0 : this.volume;
     },
 
     async fetchStatus() {
@@ -69,8 +81,9 @@ function radioPlayer() {
         this.audio?.pause();
         this.playing = false;
       } else {
-        this.loading = true;
-        this.audio   = new Audio(this.streamUrl);
+        this.loading      = true;
+        this.audio        = new Audio(this.streamUrl);
+        this.audio.volume = this.muted ? 0 : this.volume;
         this.audio.play()
           .then(() => { this.playing = true; this.loading = false; })
           .catch(() => { this.loading = false; });

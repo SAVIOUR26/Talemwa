@@ -34,6 +34,15 @@
       <i x-show="!loading && playing"  class="ti ti-player-pause-filled text-navy text-lg"></i>
     </button>
 
+    <!-- Volume -->
+    <div class="hidden md:flex items-center gap-2 flex-shrink-0 w-28">
+      <button @click="toggleMute()" class="text-gray-400 hover:text-white transition">
+        <i class="ti text-base" :class="muted || volume == 0 ? 'ti-volume-3' : volume < 0.5 ? 'ti-volume-2' : 'ti-volume'"></i>
+      </button>
+      <input type="range" min="0" max="1" step="0.01" x-model.number="volume" @input="setVolume()"
+             class="w-full h-1.5 accent-gold cursor-pointer">
+    </div>
+
     <!-- Full radio link -->
     <a href="/radio" class="hidden sm:flex items-center gap-1 text-gray-400 hover:text-gold text-xs transition flex-shrink-0">
       <i class="ti ti-radio"></i> Full Player
