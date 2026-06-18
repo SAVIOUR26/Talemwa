@@ -130,7 +130,6 @@ function radioPage() {
       } else {
         this.loading    = true;
         this.audio      = new Audio(this.streamUrl);
-        this.audio.loop = true; // demo fallback: static file loops continuously per-listener
         this.audio.play()
           .then(() => { this.playing = true; this.loading = false; })
           .catch(() => { this.loading = false; });

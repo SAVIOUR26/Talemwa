@@ -26,10 +26,11 @@ class RadioController
                 'listeners'   => $data['listeners']['current'] ?? 0,
             ]);
         } else {
-            // Fallback if AzuraCast unreachable
+            // Fallback if AzuraCast unreachable — report offline rather than
+            // falsely claiming a live stream.
             Response::json([
                 'stream_url'  => STREAM_URL,
-                'is_online'   => true,
+                'is_online'   => false,
                 'now_playing' => ['title' => 'Ministry Radio', 'artist' => '', 'art' => null],
                 'listeners'   => 0,
             ]);
