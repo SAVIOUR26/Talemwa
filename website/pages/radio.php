@@ -24,6 +24,15 @@ include __DIR__ . '/../partials/nav.php';
         </div>
       </div>
 
+      <!-- Equalizer -->
+      <div class="flex items-end justify-center gap-1 h-6 mb-4" x-show="playing">
+        <span class="eq-bar"></span>
+        <span class="eq-bar"></span>
+        <span class="eq-bar"></span>
+        <span class="eq-bar"></span>
+        <span class="eq-bar"></span>
+      </div>
+
       <!-- Now playing -->
       <div class="mb-6">
         <div class="flex items-center justify-center gap-2 mb-2">
@@ -56,6 +65,15 @@ include __DIR__ . '/../partials/nav.php';
            class="w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition" title="Share">
           <i class="ti ti-share text-xl"></i>
         </a>
+      </div>
+
+      <!-- Volume -->
+      <div class="flex items-center justify-center gap-3 mb-6 max-w-xs mx-auto">
+        <button @click="toggleMute()" class="text-gray-400 hover:text-white transition flex-shrink-0">
+          <i class="ti text-lg" :class="muted || volume == 0 ? 'ti-volume-3' : volume < 0.5 ? 'ti-volume-2' : 'ti-volume'"></i>
+        </button>
+        <input type="range" min="0" max="1" step="0.01" x-model.number="volume" @input="setVolume()"
+               class="w-full h-1.5 accent-gold cursor-pointer">
       </div>
 
       <!-- Stream URL -->
@@ -104,10 +122,22 @@ function radioPage() {
     listeners: 0,
     streamUrl: '',
     audio:     null,
+    volume:    1,
+    muted:     false,
 
     async init() {
       await this.fetchStatus();
       setInterval(() => this.fetchStatus(), 30000);
+    },
+
+    setVolume() {
+      this.muted = false;
+      if (this.audio) this.audio.volume = this.volume;
+    },
+
+    toggleMute() {
+      this.muted = !this.muted;
+      if (this.audio) this.audio.volume = this.muted ? 0 : this.volume;
     },
 
     async fetchStatus() {
@@ -128,8 +158,9 @@ function radioPage() {
         this.audio?.pause();
         this.playing = false;
       } else {
-        this.loading    = true;
-        this.audio      = new Audio(this.streamUrl);
+        this.loading      = true;
+        this.audio        = new Audio(this.streamUrl);
+        this.audio.volume = this.muted ? 0 : this.volume;
         this.audio.play()
           .then(() => { this.playing = true; this.loading = false; })
           .catch(() => { this.loading = false; });
