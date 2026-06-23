@@ -29,7 +29,7 @@ class TalemwaAudioHandler extends BaseAudioHandler with QueueHandler, SeekHandle
     play();
   }
 
-  Future<void> playRadio(String streamUrl, {String title = 'Ministry Radio', String artist = ''}) async {
+  Future<void> playRadio(String streamUrl, {String title = 'Miracles Now Radio', String artist = ''}) async {
     mediaItem.add(MediaItem(
       id:     streamUrl,
       title:  title,

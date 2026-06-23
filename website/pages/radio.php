@@ -1,6 +1,6 @@
 <?php
-$pageTitle   = 'Online Radio';
-$metaDesc    = 'Listen to Ministry Radio — sermons, worship, and devotionals 24/7 on radio.roberttalemwa.online';
+$pageTitle   = 'Miracles Now Radio — Online Radio';
+$metaDesc    = 'Listen to Miracles Now Radio — sermons, worship, and devotionals 24/7 from Pastor Robert Talemwa, streaming live on radio.roberttalemwa.online';
 $currentPage = 'radio';
 include __DIR__ . '/../partials/head.php';
 include __DIR__ . '/../partials/nav.php';
@@ -41,7 +41,7 @@ include __DIR__ . '/../partials/nav.php';
           </span>
           <span x-show="!isOnline" class="text-xs text-gray-500">OFFLINE</span>
         </div>
-        <h1 class="text-2xl font-bold text-white" x-text="title || 'Ministry Radio'"></h1>
+        <h1 class="text-2xl font-bold text-white" x-text="title || 'Miracles Now Radio'"></h1>
         <p class="text-gray-400 mt-1" x-text="artist || 'Pastor Robert Talemwa · Ministry'"></p>
         <p class="text-gray-500 text-sm mt-2" x-text="`${listeners} listening now`"></p>
       </div>
@@ -60,7 +60,7 @@ include __DIR__ . '/../partials/nav.php';
           <i x-show="!loading && !playing" class="ti ti-player-play-filled text-navy text-3xl"></i>
           <i x-show="!loading && playing"  class="ti ti-player-pause-filled text-navy text-3xl"></i>
         </button>
-        <a :href="`https://wa.me/?text=${encodeURIComponent('Listening to Ministry Radio: https://roberttalemwa.online/radio')}`"
+        <a :href="`https://wa.me/?text=${encodeURIComponent('Listening to Miracles Now Radio: https://roberttalemwa.online/radio')}`"
            target="_blank"
            class="w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition" title="Share">
           <i class="ti ti-share text-xl"></i>
@@ -116,7 +116,7 @@ function radioPage() {
     playing:   false,
     loading:   false,
     isOnline:  false,
-    title:     'Ministry Radio',
+    title:     'Miracles Now Radio',
     artist:    '',
     art:       null,
     listeners: 0,
@@ -145,7 +145,7 @@ function radioPage() {
         const data     = await apiFetch('/api/radio');
         this.streamUrl = data.stream_url;
         this.isOnline  = data.is_online;
-        this.title     = data.now_playing?.title || 'Ministry Radio';
+        this.title     = data.now_playing?.title || 'Miracles Now Radio';
         this.artist    = data.now_playing?.artist || '';
         this.art       = data.now_playing?.art || null;
         this.listeners = data.listeners || 0;

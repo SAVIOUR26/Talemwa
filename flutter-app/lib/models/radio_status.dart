@@ -6,7 +6,7 @@ class NowPlaying {
   const NowPlaying({required this.title, required this.artist, this.art});
 
   factory NowPlaying.fromJson(Map<String, dynamic> j) => NowPlaying(
-    title:  j['title']  as String? ?? 'Ministry Radio',
+    title:  j['title']  as String? ?? 'Miracles Now Radio',
     artist: j['artist'] as String? ?? '',
     art:    j['art']    as String?,
   );
@@ -35,7 +35,7 @@ class RadioStatus {
   factory RadioStatus.offline() => RadioStatus(
     streamUrl:  '',
     isOnline:   false,
-    nowPlaying: const NowPlaying(title: 'Ministry Radio', artist: ''),
+    nowPlaying: const NowPlaying(title: 'Miracles Now Radio', artist: ''),
     listeners:  0,
   );
 }

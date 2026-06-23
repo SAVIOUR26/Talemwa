@@ -20,7 +20,7 @@ class RadioScreen extends ConsumerWidget {
         backgroundColor: AppColors.navy,
         appBar: AppBar(
           backgroundColor: AppColors.navy,
-          title: const Text('Ministry Radio', style: TextStyle(color: Colors.white)),
+          title: const Text('Miracles Now Radio', style: TextStyle(color: Colors.white)),
           iconTheme: const IconThemeData(color: Colors.white),
           bottom: const TabBar(
             labelColor:         AppColors.gold,

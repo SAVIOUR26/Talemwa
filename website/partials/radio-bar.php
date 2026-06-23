@@ -14,7 +14,7 @@
     <!-- Track info -->
     <div class="flex-1 min-w-0">
       <p class="text-white text-sm font-medium truncate" x-text="title"></p>
-      <p class="text-gray-400 text-xs truncate" x-text="artist || 'Ministry Radio · roberttalemwa.online'"></p>
+      <p class="text-gray-400 text-xs truncate" x-text="artist || 'Miracles Now Radio · roberttalemwa.online'"></p>
     </div>
 
     <!-- Listener count -->

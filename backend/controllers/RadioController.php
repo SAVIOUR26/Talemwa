@@ -20,7 +20,7 @@ class RadioController
                 'is_online'   => $data['station']['is_public'] ?? true,
                 'now_playing' => [
                     'title'    => $data['now_playing']['song']['title'] ?? 'Live Stream',
-                    'artist'   => $data['now_playing']['song']['artist'] ?? 'Ministry Radio',
+                    'artist'   => $data['now_playing']['song']['artist'] ?? 'Miracles Now Radio',
                     'art'      => $data['now_playing']['song']['art'] ?? null,
                 ],
                 'listeners'   => $data['listeners']['current'] ?? 0,
@@ -31,7 +31,7 @@ class RadioController
             Response::json([
                 'stream_url'  => STREAM_URL,
                 'is_online'   => false,
-                'now_playing' => ['title' => 'Ministry Radio', 'artist' => '', 'art' => null],
+                'now_playing' => ['title' => 'Miracles Now Radio', 'artist' => '', 'art' => null],
                 'listeners'   => 0,
             ]);
         }

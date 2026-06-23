@@ -31,7 +31,7 @@ class AudioNotifier extends StateNotifier<AudioState> {
     state = AudioState(currentSermon: sermon, isRadio: false, isPlaying: true);
   }
 
-  Future<void> playRadio(String streamUrl, {String title = 'Ministry Radio', String artist = ''}) async {
+  Future<void> playRadio(String streamUrl, {String title = 'Miracles Now Radio', String artist = ''}) async {
     await audioHandler.playRadio(streamUrl, title: title, artist: artist);
     state = AudioState(isRadio: true, isPlaying: true);
   }
