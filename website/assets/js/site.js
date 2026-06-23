@@ -28,7 +28,7 @@ function radioPlayer() {
   return {
     playing:    false,
     loading:    false,
-    title:      'Ministry Radio',
+    title:      'Miracles Now Radio',
     artist:     '',
     art:        null,
     listeners:  0,
@@ -58,7 +58,7 @@ function radioPlayer() {
         const data     = await apiFetch('/api/radio');
         this.streamUrl = data.stream_url;
         this.isOnline  = data.is_online;
-        this.title     = data.now_playing?.title || 'Ministry Radio';
+        this.title     = data.now_playing?.title || 'Miracles Now Radio';
         this.artist    = data.now_playing?.artist || '';
         this.art       = data.now_playing?.art || null;
         this.listeners = data.listeners || 0;
@@ -68,7 +68,7 @@ function radioPlayer() {
     async fetchNowPlaying() {
       try {
         const data  = await apiFetch('/api/radio');
-        this.title  = data.now_playing?.title || 'Ministry Radio';
+        this.title  = data.now_playing?.title || 'Miracles Now Radio';
         this.artist = data.now_playing?.artist || '';
         this.art    = data.now_playing?.art || null;
         this.listeners = data.listeners || 0;

@@ -1,6 +1,6 @@
-# Talemwa Radio — AzuraCast Operating Manual
+# Miracles Now Radio — AzuraCast Operating Manual
 
-**Station:** Talemwa Radio
+**Station:** Miracles Now Radio
 **Dashboard:** https://radio.roberttalemwa.online
 **Prepared for:** Pastor Robert Talemwa & Ministry Media Team
 **Prepared by:** Thirdsan Enterprises Ltd
@@ -30,9 +30,9 @@
 
 1. Open your browser and go to: **https://radio.roberttalemwa.online**
 2. Enter your admin email and password.
-3. You will land on the **Stations** list. Click **MANAGE** next to "Talemwa Radio" to enter the station's control room.
+3. You will land on the **Stations** list. Click **MANAGE** next to "Miracles Now Radio" to enter the station's control room.
 
-> 💡 Everything described in this manual happens *inside* the Talemwa Radio station (after clicking MANAGE), unless stated otherwise.
+> 💡 Everything described in this manual happens *inside* the Miracles Now Radio station (after clicking MANAGE), unless stated otherwise.
 
 ---
 
@@ -152,7 +152,7 @@ Use this so specific programs (e.g. "Sunday Service Replay," "Wednesday Bible St
 4. Add the relevant audio files to this playlist (same method as Section 4).
 5. Save — AzuraCast will automatically switch to this playlist during its scheduled window, then return to General Rotation afterward.
 
-**Example schedule for Talemwa Radio:**
+**Example schedule for Miracles Now Radio:**
 
 | Program | Day | Time |
 |---|---|---|
@@ -179,7 +179,7 @@ Recommendations:
 
 ## 8. Running Adverts / Announcements
 
-Use the **"Once per X Songs"** playlist type for short ads, sponsor messages, or station IDs ("You're listening to Talemwa Radio...").
+Use the **"Once per X Songs"** playlist type for short ads, sponsor messages, or station IDs ("You're listening to Miracles Now Radio...").
 
 1. Record/prepare a short audio clip (5–30 seconds is typical).
 2. Go to **Media → Music Files** and upload it.

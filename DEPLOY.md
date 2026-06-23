@@ -106,8 +106,8 @@ During installation when prompted:
 **After installation:**
 1. Visit `https://radio.roberttalemwa.online`
 2. Create admin account
-3. Create station: **"Talemwa Radio"**
-4. Set stream URL path: `/stream`
+3. Create station: **"Miracles Now Radio"**
+4. Set stream URL path: `/listen/miracles_now_radio/radio.mp3`
 5. Upload intro/hold music (worship songs, ~30 min loop)
 6. Admin → API Keys → Generate → copy key → paste into `.env` as `AZURACAST_API_KEY`
 7. Set weekly broadcast schedule
@@ -236,9 +236,9 @@ This fires when a payment completes and marks the giving record as `completed`.
 - [ ] Push notification composer sends a test notification
 
 ### Radio
-- [ ] `https://radio.roberttalemwa.online/stream` streams audio
+- [ ] `https://radio.roberttalemwa.online/listen/miracles_now_radio/radio.mp3` streams audio
 - [ ] AzuraCast dashboard accessible
-- [ ] Station name: "Talemwa Radio"
+- [ ] Station name: "Miracles Now Radio"
 - [ ] Schedule populated with Sunday/Wednesday/Friday/Daily slots
 - [ ] API proxy works: `curl https://api.roberttalemwa.online/api/radio`
 
